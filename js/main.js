@@ -101,18 +101,35 @@
   var ICON_BERATUNG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg>';
   var STAGE_DATA = {
     beratung: { index: "01", name: "Beratung", solid: true, icon: ICON_BERATUNG },
-    abriss: { index: "02", name: "Abriss", main: ["assets/images/optimized/pf-abriss-g3-480.webp", "Rückgebautes Gebäude in einem Waldgrundstück"] },
-    rohbau: { index: "03", name: "Rohbau", main: ["assets/images/optimized/pf-rohbau-hero-900.webp", "Rohbau eines Wohnhauses mit Gerüst"] },
-    trockenbau: { index: "04", name: "Trockenbau", main: ["assets/images/optimized/pf-trockenbau-g1-480.webp", "Trockenbauplatten im Rohzustand"] },
-    fliesen: { index: "05", name: "Fliesen", ba: [
-      ["assets/images/optimized/pf-fliesen-g5-480.webp", "Bad vorher: Mosaikfliesen werden verlegt"],
-      ["assets/images/optimized/pf-fliesen-g3-480.webp", "Bad nachher: fertiges Bad mit Sechseckfliesen"]
+    abriss: { index: "02", name: "Abriss", blocks: [
+      { type: "single", src: "assets/images/optimized/pf-abriss-g6-480.webp", alt: "JoLoTex Baumfäll- und Rückschnittarbeiten: Holzgreifer verlädt Stämme auf Anhänger" }
     ] },
-    fassade: { index: "06", name: "Fassade", ba: [
-      ["assets/images/optimized/pf-fassade-g1-480.webp", "Fassade vorher: Gerüst mit grauem Grundputz"],
-      ["assets/images/optimized/pf-fassade-g4-480.webp", "Fassade nachher: fertiger gelber Anstrich"]
+    rohbau: { index: "03", name: "Rohbau", blocks: [
+      { type: "single", src: "assets/images/optimized/pf-rohbau-hero-900.webp", alt: "Rohbau eines Wohnhauses mit Gerüst und Ziegelmauerwerk" }
     ] },
-    sanierung: { index: "07", name: "Sanierung", main: ["assets/images/optimized/pf-sanierung-hero-900.webp", "Sanierung einer Brückenunterführung"] }
+    trockenbau: { index: "04", name: "Trockenbau", blocks: [
+      { type: "pair",
+        before: ["assets/images/optimized/pf-trockenbau-g5-480.webp", "Zimmer vorher: offene Decke, entkernte Wände, Rohzustand"],
+        after: ["assets/images/optimized/pf-trockenbau-g6-480.webp", "Zimmer nachher: verputzte Wände, neue Decke, bezugsfertig"] }
+    ] },
+    fliesen: { index: "05", name: "Fliesen", blocks: [
+      { type: "pair",
+        before: ["assets/images/optimized/pf-fliesen-g5-480.webp", "Bad vorher: Mosaikfliesen werden verlegt, Rohboden sichtbar"],
+        after: ["assets/images/optimized/pf-fliesen-g3-480.webp", "Bad nachher: fertiges Bad mit schwarzen Waschbecken und Sechseckfliesen"] }
+    ] },
+    fassade: { index: "06", name: "Fassade", blocks: [
+      { type: "pair",
+        before: ["assets/images/optimized/pf-fassade-g1-480.webp", "Fassade vorher: Gerüst mit grauem Grundputz"],
+        after: ["assets/images/optimized/pf-fassade-g4-480.webp", "Fassade nachher: fertiger gelber Anstrich"] }
+    ] },
+    sanierung: { index: "07", name: "Sanierung", blocks: [
+      { type: "pair",
+        before: ["assets/images/optimized/pf-sanierung-g7-480.webp", "Bodenaufbau vorher: alter Belag wird mit Stemmhammer entfernt"],
+        after: ["assets/images/optimized/pf-sanierung-g8-480.webp", "Bodenaufbau nachher: neuer grauer Teppichboden verlegt"] },
+      { type: "pair",
+        before: ["assets/images/optimized/pf-sanierung-g5-480.webp", "Brückenunterführung vorher: Betonwand mit freiliegender Bewehrungsmatte"],
+        after: ["assets/images/optimized/pf-sanierung-g6-480.webp", "Brückenunterführung nachher: instand gesetzte Wandfläche mit rotem Anstrich"] }
+    ] }
   };
 
   var accordion = document.querySelector("[data-accordion]");
@@ -123,23 +140,28 @@
     var stageNameEl = stage && stage.querySelector("[data-stage-name]");
     var stageBodyEl = stage && stage.querySelector("[data-stage-body]");
 
+    function renderStageBlock(block) {
+      if (block.type === "pair") {
+        return '<div class="gewerke__stage-compare">' +
+            '<figure class="gewerke__compare-item gewerke__compare-item--before"><img src="' + block.before[0] + '" alt="' + block.before[1] + '"><span class="gewerke__compare-tag">Vorher</span></figure>' +
+            '<figure class="gewerke__compare-item gewerke__compare-item--after"><img src="' + block.after[0] + '" alt="' + block.after[1] + '"><span class="gewerke__compare-tag">Nachher</span></figure>' +
+            '<div class="gewerke__compare-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>' +
+          '</div>';
+      }
+      return '<img class="gewerke__stage-main" src="' + block.src + '" alt="' + block.alt + '">';
+    }
+
     function setStage(key) {
       var data = STAGE_DATA[key];
       if (!data || !stage) return;
+      stage.setAttribute("data-active-key", key);
       stageIndexEl.textContent = data.index;
       stageNameEl.textContent = data.name;
       if (data.solid) {
         stageBodyEl.innerHTML =
           '<div class="gewerke__stage-solid is-active">' + data.icon + '<span>Gewerk ' + data.index + '</span><strong>' + data.name + "</strong></div>";
-      } else if (data.ba) {
-        stageBodyEl.innerHTML =
-          '<div class="gewerke__stage-compare">' +
-            '<figure class="gewerke__compare-item gewerke__compare-item--before"><img src="' + data.ba[0][0] + '" alt="' + data.ba[0][1] + '"><span class="gewerke__compare-tag">Vorher</span></figure>' +
-            '<figure class="gewerke__compare-item gewerke__compare-item--after"><img src="' + data.ba[1][0] + '" alt="' + data.ba[1][1] + '"><span class="gewerke__compare-tag">Nachher</span></figure>' +
-            '<div class="gewerke__compare-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>' +
-          '</div>';
       } else {
-        stageBodyEl.innerHTML = '<img class="gewerke__stage-main" src="' + data.main[0] + '" alt="' + data.main[1] + '">';
+        stageBodyEl.innerHTML = data.blocks.map(renderStageBlock).join("");
       }
     }
 

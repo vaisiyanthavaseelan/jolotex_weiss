@@ -371,12 +371,12 @@ body::before {
   display: none; position: relative;
   grid-template-columns: 1fr 1fr; gap: 2px;
   border-radius: 14px; overflow: hidden;
-  border: 1px solid var(--line-strong); background: var(--line-strong);
+  border: none; background: transparent;
 }
-.gewerke__compare-item { position: relative; margin: 0; overflow: hidden; background: var(--bg-panel); }
+.gewerke__compare-item { position: relative; margin: 0; overflow: hidden; }
 .gewerke__compare-item img {
   display: block; width: 100%; height: 100%; aspect-ratio: 1 / 1;
-  object-fit: contain; background: radial-gradient(circle at center, var(--bg-raised), var(--bg-panel));
+  object-fit: cover;
   transition: transform 0.5s var(--ease);
 }
 .gewerke__compare-item:hover img { transform: scale(1.05); }
@@ -412,6 +412,7 @@ body::before {
   display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: contain; object-position: center;
   background: var(--bg-raised); transition: opacity 0.35s var(--ease);
 }
+[data-stage][data-active-key="sanierung"] .gewerke__stage-main { aspect-ratio: 4 / 3; }
 .gewerke__stage-solid {
   background: linear-gradient(155deg, var(--rust) 0%, var(--rust-deep) 100%);
   display: flex; flex-direction: column; justify-content: flex-end; padding: clamp(1.5rem, 3vw, 2.5rem);
@@ -419,8 +420,10 @@ body::before {
 }
 .gewerke__stage-solid svg { width: 52px; height: 52px; color: rgba(20,16,12,.75); margin-bottom: auto; }
 .gewerke__stage-solid span { font-family: var(--font-mono); font-size: var(--step--1); color: rgba(20,16,12,.6); }
-.gewerke__stage-compare { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--line); }
+.gewerke__stage-compare { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: transparent; }
 .gewerke__stage-compare .gewerke__compare-item img { aspect-ratio: 4 / 5; }
+[data-stage][data-active-key="sanierung"] .gewerke__stage-compare .gewerke__compare-item img { aspect-ratio: 1 / 1; }
+[data-stage-body] > * + * { margin-top: 1.2rem; }
 .gewerke__stage-solid strong {
   display: block; font-family: var(--font-display); font-size: clamp(2.2rem, 2vw + 1.6rem, 3.4rem);
   color: #14100c; text-transform: uppercase; line-height: 0.95; margin-top: 0.4rem;
@@ -590,6 +593,7 @@ body::before {
   .gewerke__stage { display: none; }
   .gewerke__panel-img { display: block; width: 100%; }
   .gewerke__compare { display: grid; margin-top: 1.2rem; }
+  .gewerke__compare-item img { aspect-ratio: 4 / 5; }
 
   .bauherren__grid { grid-template-columns: 1fr; max-width: 26rem; }
   .bauherren__figure img { aspect-ratio: 4/3; }
@@ -606,4 +610,5 @@ body::before {
 @media (max-width: 640px) {
   .btn-whatsapp span { display: none; }
   .masthead__actions { gap: 0.5rem; }
+  .cover__media img { object-position: 50% 22%; }
 }
